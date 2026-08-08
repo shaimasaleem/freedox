@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SAU EVENT PARTICIPATION</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #bfe8e7;
+            color: #020306;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #11162d;
+            color: white;
+            padding: 25px 15px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+        }
+
+        .nav button {
+            width: 100%;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            text-align: left;
+            background: transparent;
+            color: #b9bfd4;
+            border-radius: 10px;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            background: #282d4c;
+            color: white;
+        }
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .topbar p {
+            color: #7b8497;
+        }
+
+        .admin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid #e5e7ef;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #e4e1ff;
+            color: #5148c9;
+            font-weight: bold;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 18px;
+            border: 1px solid #e7e8ef;
+            box-shadow: 0 5px 20px rgba(20, 25, 50, 0.04);
+        }
+
+        .stat-card p {
+            color: #7c8495;
+            font-size: 14px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            margin-top: 8px;
+        }
+
+        .green {
+            color: #16a34a;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid #e7e8ef;
+            box-shadow: 0 5px 20px rgba(20, 25, 50, 0.04);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            font-size: 19px;
+        }
+
+        .panel-header p {
+            color: #7c8495;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #5b5ce2, #8b5cf6);
+            color: white;
+        }
+
+        .secondary {
+            background: #f0f1f7;
+            color: #303647;
+        }
+
+        .danger {
+            background: #fff0f1;
+            color: #dc3545;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 20px;
+        }
+
+        .event-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .event {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e8e9ef;
+            border-radius: 14px;
+        }
+
+        .event-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .date-box {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f0efff;
+            color: #514bc9;
+            border-radius: 12px;
+        }
+
+        .date-box strong {
+            font-size: 18px;
+        }
+
+        .date-box small {
+            font-size: 10px;
+        }
+
+        .event h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .event p {
+            color: #7c8495;
+            font-size: 12px;
+        }
+
+        .tag {
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #f0f1f6;
+            font-size: 11px;
+        }
+
+        .online {
+            background: #eaf8ef;
+            color: #16803a;
+        }
+
+        .offline {
+            background: #fff3df;
+            color: #a86500;
+        }
+
+        .activity {
+            display: grid;
+            gap: 18px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            margin-top: 5px;
+            border-radius: 50%;
+            background: #6366f1;
+            flex-shrink: 0;
+        }
+
+        .activity-item p {
+            font-size: 13px;
+        }
+
+        .activity-item small {
+            color: #7c8495;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            padding: 11px 13px;
+            border: 1px solid #e0e2e9;
+            border-radius: 10px;
+            background: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+        }
+
+        .search {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .event-card {
+            background: white;
+            padding: 20px;
+            border: 1px solid #e6e7ee;
+            border-radius: 18px;
+            transition: 0.2s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 45, 90, 0.08);
+        }
+
+        .event-type {
+            color: #5b5ce2;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .event-card h3 {
+            margin: 10px 0;
+        }
+
+        .event-card p {
+            color: #737c8f;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #ececf2;
+            font-size: 13px;
+        }
+
+        th {
+            color: #747c8d;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .report-card {
+            background: #f8f8fc;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .report-card small {
+            color: #737b8e;
+        }
+
+        .report-card strong {
+            display: block;
+            font-size: 23px;
+            margin-top: 8px;
+        }
+
+        .bar-container {
+            margin-top: 18px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .bar {
+            height: 9px;
+            background: #e8e9f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5b5ce2, #a855f7);
+        }
+
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 20, 40, 0.65);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .modal-bg.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 600px;
+            max-width: 100%;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #4d5567;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .empty-message {
+            padding: 30px;
+            text-align: center;
+            color: #7c8495;
+        }
+
+        .about-panel {
+            background: white;
+            padding: 22px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .about-panel h2 {
+            margin-bottom: 10px;
+        }
+
+        .about-panel p {
+            color: #555f72;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        @media(max-width: 1000px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .event-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .sidebar {
+                width: 65px;
+            }
+
+            .logo span,
+            .nav button span {
+                display: none;
+            }
+
+            .main {
+                margin-left: 65px;
+                width: calc(100% - 65px);
+                padding: 18px;
+            }
+
+            .stats,
+            .event-grid,
+            .report-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .admin {
+                display: none;
+            }
+
+            .event {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">SE</div>
+                <span>SOEEvents</span>
+            </div>
+
+            <div class="nav">
+
+                <button class="active"
+                    onclick="showSection('dashboard', this)">
+                    🏠 <span>Dashboard</span>
+                </button>
+
+                <button onclick="showSection('events', this)">
+                    📅 <span>Events</span>
+                </button>
+
+                <button onclick="showSection('students', this)">
+                    👥 <span>Students</span>
+                </button>
+
+                <button onclick="showSection('reports', this)">
+                    📊 <span>Reports</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <div class="about-panel">
+
+                <h2>About Our Events</h2>
+
+                <p>
+                    St Aloysius University has been actively involved in
+                    various events related to its B.Tech programs.
+                    The university has launched AICTE-approved B.Tech
+                    programs and has organized induction programs for
+                    first-year students to familiarize them with the
+                    expectations of engineering education and equip them
+                    with essential leadership and industry-oriented skills.
+                    The university also holds national-level undergraduate
+                    fests like 'Aloysian Fest 2025' to celebrate its rich
+                    legacy and engage with the community. These events
+                    reflect the university's commitment to academic
+                    excellence, institutional innovation, and holistic
+                    student development.
+                </p>
+
+                <br>
+
+                <strong>Contact Us:</strong>
+                <p>Email: collegeevents@sau.com</p>
+
+            </div>
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+
+                <div>
+                    <h1 id="pageTitle">
+                        Participation Command Center
+                    </h1>
+
+                    <p id="pageDescription">
+                        Manage workshops, seminars and student participation.
+                    </p>
+                </div>
+
+                <div class="admin">
+
+                    <div class="avatar">
+                        AD
+                    </div>
+
+                    <strong>Admin</strong>
+
+                </div>
+
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="section active">
+
+                <div class="stats">
+
+                    <div class="stat-card">
+                        <p>Total Events</p>
+                        <h2 id="totalEvents">0</h2>
+                        <div class="green">
+                            Active academic year
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Participation Records</p>
+                        <h2 id="totalParticipations">0</h2>
+                        <div class="green">
+                            Student engagement
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Students Engaged</p>
+                        <h2 id="totalStudents">0</h2>
+                        <div class="green">
+                            Unique students
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <p>Certificates</p>
+                        <h2 id="totalCertificates">0</h2>
+                        <div class="green">
+                            Evidence recorded
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h2>Recent Events</h2>
+                                <p>Latest campus activities</p>
+                            </div>
+
+                            <button class="btn primary"
+                                onclick="openEventModal()">
+                                + New Event
+                            </button>
+
+                        </div>
+
+                        <div id="recentEvents"
+                            class="event-list">
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <h2>Live Activity</h2>
+                                <p>Latest participation</p>
+                            </div>
+
+                        </div>
+
+                        <div id="activity"
+                            class="activity">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- EVENTS -->
+            <section id="events" class="section">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Event Explorer</h2>
+                            <p>
+                                Create, search, filter and manage events.
+                            </p>
+                        </div>
+
+                        <button class="btn primary"
+                            onclick="openEventModal()">
+                            + Create Event
+                        </button>
+
+                    </div>
+
+                    <div class="toolbar">
+
+                        <input id="searchInput"
+                            class="search"
+                            type="text"
+                            placeholder="Search event or organizer..."
+                            oninput="renderEvents()">
+
+                        <select id="typeFilter"
+                            onchange="renderEvents()">
+
+                            <option value="">All Types</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Seminar">Seminar</option>
+                            <option value="Conference">Conference</option>
+                            <option value="Training">Training</option>
+                            <option value="Webinar">Webinar</option>
+
+                        </select>
+
+                        <select id="modeFilter"
+                            onchange="renderEvents()">
+
+                            <option value="">All Modes</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+
+                        </select>
+
+                    </div>
+
+                    <div id="eventGrid"
+                        class="event-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- STUDENTS -->
+            <section id="students" class="section">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>
+                                Student Participation Passport
+                            </h2>
+
+                            <p>
+                                View the complete participation history
+                                of a student.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <select id="studentSelect"
+                        onchange="showStudentHistory()">
+                    </select>
+
+                    <div id="studentSummary"
+                        style="margin-top:20px">
+                    </div>
+
+                    <div id="studentHistory"
+                        style="margin-top:20px">
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- REPORTS -->
+            <section id="reports" class="section">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Reports & Insights</h2>
+
+                            <p>
+                                Understand student participation.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="report-grid">
+
+                        <div class="report-card">
+                            <small>
+                                Most Popular Category
+                            </small>
+
+                            <strong id="popularCategory">
+                                -
+                            </strong>
+                        </div>
+
+                        <div class="report-card">
+                            <small>
+                                Most Active Student
+                            </small>
+
+                            <strong id="activeStudent">
+                                -
+                            </strong>
+                        </div>
+
+                        <div class="report-card">
+                            <small>
+                                Online Participation
+                            </small>
+
+                            <strong id="onlinePercentage">
+                                -
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div id="reportBars"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- EVENT MODAL -->
+    <div id="eventModal" class="modal-bg">
+
+        <div class="modal">
+
+            <h2 id="modalTitle">
+                Create New Event
+            </h2>
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label>Event Name</label>
+
+                    <input id="eventName"
+                        type="text"
+                        placeholder="Example: AI Innovation Workshop">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Event Type</label>
+
+                    <select id="eventType">
+                        <option>Workshop</option>
+                        <option>Seminar</option>
+                        <option>Conference</option>
+                        <option>Training</option>
+                        <option>Webinar</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Mode</label>
+
+                    <select id="eventMode">
+                        <option>Offline</option>
+                        <option>Online</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Organizer</label>
+
+                    <input id="eventOrganizer"
+                        type="text"
+                        placeholder="CSE Department">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Date</label>
+
+                    <input id="eventDate"
+                        type="date">
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Participants</label>
+
+                    <input id="eventParticipants"
+                        type="text"
+                        placeholder="Arun, Rahul, Aisha">
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Evidence / Certificate</label>
+
+                    <select id="eventEvidence">
+
+                        <option>Certificate</option>
+                        <option>Attendance</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button class="btn secondary"
+                    onclick="closeEventModal()">
+                    Cancel
+                </button>
+
+                <button class="btn primary"
+                    onclick="saveEvent()">
+                    Save Event
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        /* =========================
+           EVENT DATA
+        ========================= */
+
+        let events = [
+
+            {
+                id: 1,
+                name: "AI & Future of Work",
+                type: "Seminar",
+                organizer: "CSE Department",
+                date: "2026-08-12",
+                mode: "Offline",
+                evidence: "Certificate",
+
+                participants: [
+                    "Arun",
+                    "Kajal",
+                    "Fathima Sahla",
+                    "Joseph",
+                    "Kalandar",
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Manav Bhatia",
+                    "Riya Choudhary",
+                    "Aman Tripathi",
+                    "Nisha Reddy",
+                    "Devansh Mishra",
+                    "Simran Kaur",
+                    "Zoya Ahmed"
+                ]
+            },
+
+            {
+                id: 2,
+                name: "Web Design Sprint",
+                type: "Workshop",
+                organizer: "Innovation Cell",
+                date: "2026-08-18",
+                mode: "Online",
+                evidence: "Certificate",
+
+                participants: [
+                    "Anjali Deshmukh",
+                    "Varun Khanna",
+                    "Ritika Bose",
+                    "Yash Tiwari",
+                    "Komal Sethi",
+                    "Naveen Kulkarni",
+                    "Shreya Pillai",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah",
+                    "Akash Saxena",
+                    "Bhavna Arora",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Vivek Shetty",
+                    "Monika Bedi",
+                    "Sameer Kapoor",
+                    "Jhanvi Thakur",
+                    "Arnav Sood",
+                    "Kriti Malviya",
+                    "Parth Desai",
+                    "Zoya Ansari",
+                    "Rohan Kulkarni",
+                    "Ankita Mishra"
+                ]
+            },
+
+            {
+                id: 3,
+                name: "Cyber Security Basics",
+                type: "Training",
+                organizer: "CSE Department",
+                date: "2026-07-22",
+                mode: "Offline",
+                evidence: "Certificate",
+
+                participants: [
+                    "Rahul Kumar",
+                    "Zoya Ahmed",
+                    "Sara Thomas",
+                    "Ibrahim Ali",
+                    "Anjali Deshmukh",
+                    "Varun Khanna",
+                    "Ritika Bose",
+                    "Yash Tiwari",
+                    "Komal Sethi",
+                    "Naveen Kulkarni",
+                    "Shreya Pillai",
+                    "Akash Saxena",
+                    "Bhavna Arora",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Vivek Shetty",
+                    "Monika Bedi",
+                    "Sameer Kapoor",
+                    "Jhanvi Thakur",
+                    "Arnav Sood",
+                    "Kriti Malviya",
+                    "Parth Desai",
+                    "Zoya Ansari",
+                    "Rohan Kulkarni",
+                    "Ankita Mishra"
+                ]
+            },
+
+            {
+                id: 4,
+                name: "Entrepreneurship Bootcamp",
+                type: "Conference",
+                organizer: "E-Cell",
+                date: "2026-07-15",
+                mode: "Offline",
+                evidence: "Attendance",
+
+                participants: [
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Manav Bhatia",
+                    "Riya Choudhary",
+                    "Aman Tripathi",
+                    "Nisha Reddy",
+                    "Devansh Mishra",
+                    "Simran Kaur"
+                ]
+            },
+
+            {
+                id: 5,
+                name: "Cloud Computing 101",
+                type: "Webinar",
+                organizer: "CSE Department",
+                date: "2026-07-08",
+                mode: "Online",
+                evidence: "Certificate",
+
+                participants: [
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Vivek Shetty",
+                    "Monika Bedi",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah",
+                    "Sameer Kapoor",
+                    "Jhanvi Thakur",
+                    "Arnav Sood",
+                    "Kriti Malviya",
+                    "Parth Desai",
+                    "Zoya Ansari",
+                    "Rohan Kulkarni",
+                    "Ankita Mishra",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Manav Bhatia",
+                    "Riya Choudhary"
+                ]
+            },
+
+            {
+                id: 6,
+                name: "UI/UX Masterclass",
+                type: "Workshop",
+                organizer: "Design Club",
+                date: "2026-06-28",
+                mode: "Offline",
+                evidence: "Certificate",
+
+                participants: [
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Manav Bhatia",
+                    "Riya Choudhary",
+                    "Aman Tripathi",
+                    "Nisha Reddy",
+                    "Devansh Mishra",
+                    "Simran Kaur",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah"
+                ]
+            },
+
+            {
+                id: 7,
+                name: "Database Management",
+                type: "Training",
+                organizer: "CSE Department",
+                date: "2026-06-18",
+                mode: "Online",
+                evidence: "Certificate",
+
+                participants: [
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah"
+                ]
+            },
+
+            {
+                id: 8,
+                name: "Placement Readiness",
+                type: "Seminar",
+                organizer: "Career Cell",
+                date: "2026-06-11",
+                mode: "Offline",
+                evidence: "Attendance",
+
+                participants: [
+                    "Sara Thomas",
+                    "Ibrahim Ali",
+                    "Arjun Nair",
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah"
+                ]
+            },
+
+            {
+                id: 9,
+                name: "Open Source Day",
+                type: "Conference",
+                organizer: "Coding Club",
+                date: "2026-05-30",
+                mode: "Online",
+                evidence: "Certificate",
+
+                participants: [
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Vivek Shetty",
+                    "Monika Bedi",
+                    "Sameer Kapoor",
+                    "Jhanvi Thakur",
+                    "Arnav Sood",
+                    "Kriti Malviya",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah"
+                ]
+            },
+
+            {
+                id: 10,
+                name: "Communication Skills",
+                type: "Training",
+                organizer: "Student Affairs",
+                date: "2026-05-20",
+                mode: "Offline",
+                evidence: "Certificate",
+
+                participants: [
+                    "Aisha Khan",
+                    "Rohan Das",
+                    "Meera Patel",
+                    "Arjun Singh",
+                    "Priya Sharma",
+                    "Kabir Rao",
+                    "Neha Verma",
+                    "Aditya Kumar",
+                    "Sneha Iyer",
+                    "Vikram Joshi",
+                    "Ananya Gupta",
+                    "Rahul Mehta",
+                    "Ishita Roy",
+                    "Karan Malhotra",
+                    "Pooja Nair",
+                    "Siddharth Jain",
+                    "Tanvi Kapoor",
+                    "Harsh Agarwal",
+                    "Divya Menon",
+                    "Ritesh Pandey",
+                    "Muskan Ali",
+                    "Farhan Qureshi",
+                    "Chirag Shah",
+                    "Swati Ghosh",
+                    "Ajay Yadav",
+                    "Preeti Sinha",
+                    "Rakesh Dubey",
+                    "Payal Bansal",
+                    "Nitin Chopra",
+                    "Saloni Arora",
+                    "Vivek Shetty",
+                    "Monika Bedi",
+                    "Sameer Kapoor",
+                    "Jhanvi Thakur",
+                    "Arnav Sood",
+                    "Kriti Malviya",
+                    "Parth Desai",
+                    "Zoya Ansari",
+                    "Rohan Kulkarni",
+                    "Ankita Mishra",
+                    "Sara Thomas",
+                    "Meera Pai",
+                    "Joseph",
+                    "Arun",
+                    "Yash Tiwari",
+                    "Ritika Bose",
+                    "Aisha Khan",
+                    "Ankita Mishra",
+                    "Christopher",
+                    "Devi Pai",
+                    "Saleem",
+                    "Shaza",
+                    "Gourav",
+                    "Vion Dsouza",
+                    "Abdullah"
+                ]
+            }
+
+        ];
+
+
+        /* =========================
+           STUDENT LIST
+        ========================= */
+
+        const students = [
+            "Joseph",
+            "Arun",
+            "Yash Tiwari",
+            "Ritika Bose",
+            "Aisha Khan",
+            "Ankita Mishra",
+            "Christopher",
+            "Devi Pai",
+            "Saleem",
+            "Shaza",
+            "Gourav",
+            "Vion Dsouza",
+            "Abdullah"
+        ];
+
+
+        let editingEventId = null;
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        function showSection(sectionId, button) {
+
+            document
+                .querySelectorAll(".section")
+                .forEach(section => {
+                    section.classList.remove("active");
+                });
+
+            document
+                .getElementById(sectionId)
+                .classList.add("active");
+
+            document
+                .querySelectorAll(".nav button")
+                .forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+            button.classList.add("active");
+
+            const titles = {
+
+                dashboard: [
+                    "Participation Command Center",
+                    "Manage workshops, seminars and student participation."
+                ],
+
+                events: [
+                    "Event Explorer",
+                    "Create, search, filter and manage events."
+                ],
+
+                students: [
+                    "Student Participation Passport",
+                    "View a student's complete event history."
+                ],
+
+                reports: [
+                    "Reports & Insights",
+                    "Understand student participation."
+                ]
+
+            };
+
+            document.getElementById("pageTitle").textContent =
+                titles[sectionId][0];
+
+            document.getElementById("pageDescription").textContent =
+                titles[sectionId][1];
+
+
+            if (sectionId === "events") {
+                renderEvents();
+            }
+
+            if (sectionId === "students") {
+                loadStudents();
+            }
+
+            if (sectionId === "reports") {
+                renderReports();
+            }
+
+        }
+
+
+        /* =========================
+           DASHBOARD
+        ========================= */
+
+        function renderDashboard() {
+
+            document.getElementById("totalEvents").textContent =
+                events.length;
+
+
+            const participationCount =
+                events.reduce(
+                    (total, event) =>
+                        total + event.participants.length,
+                    0
+                );
+
+
+            document.getElementById("totalParticipations").textContent =
+                participationCount;
+
+
+            const uniqueStudents =
+                new Set(
+                    events.flatMap(
+                        event => event.participants
+                    )
+                );
+
+
+            document.getElementById("totalStudents").textContent =
+                uniqueStudents.size;
+
+
+            const certificateCount =
+                events.filter(
+                    event =>
+                        event.evidence === "Certificate"
+                ).length;
+
+
+            document.getElementById("totalCertificates").textContent =
+                certificateCount;
+
+
+            renderRecentEvents();
+            renderActivity();
+        }
+
+
+        /* =========================
+           RECENT EVENTS
+        ========================= */
+
+        function renderRecentEvents() {
+
+            const container =
+                document.getElementById("recentEvents");
+
+            container.innerHTML = "";
+
+
+            events.slice(0, 5).forEach(event => {
+
+                const date =
+                    new Date(event.date + "T00:00:00");
+
+                const day =
+                    date.getDate();
+
+                const month =
+                    date.toLocaleString(
+                        "en",
+                        { month: "short" }
+                    );
+
+
+                container.innerHTML += `
+
+                    <div class="event">
+
+                        <div class="event-info">
+
+                            <div class="date-box">
+
+                                <strong>${day}</strong>
+
+                                <small>${month}</small>
+
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    ${event.name}
+                                </h3>
+
+                                <p>
+                                    ${event.organizer}
+                                    ·
+                                    ${event.participants.length}
+                                    participants
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span class="tag ${event.mode.toLowerCase()}">
+                            ${event.mode}
+                        </span>
+
+                    </div>
+                `;
+            });
+
+        }
+
+
+        /* =========================
+           ACTIVITY
+        ========================= */
+
+        function renderActivity() {
+
+            const container =
+                document.getElementById("activity");
+
+            container.innerHTML = "";
+
+
+            events.slice(0, 5).forEach(event => {
+
+                const student =
+                    event.participants[0];
+
+
+                container.innerHTML += `
+
+                    <div class="activity-item">
+
+                        <div class="dot"></div>
+
+                        <div>
+
+                            <p>
+                                <strong>${student}</strong>
+                                participated in
+                                <strong>${event.name}</strong>
+                            </p>
+
+                            <small>
+                                ${event.date}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                `;
+            });
+
+        }
+
+
+        /* =========================
+           EVENTS
+        ========================= */
+
+        function renderEvents() {
+
+            const container =
+                document.getElementById("eventGrid");
+
+
+            const search =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            const type =
+                document.getElementById("typeFilter").value;
+
+
+            const mode =
+                document.getElementById("modeFilter").value;
+
+
+            const filteredEvents =
+                events.filter(event => {
+
+                    const matchesSearch =
+                        event.name
+                            .toLowerCase()
+                            .includes(search)
+                        ||
+                        event.organizer
+                            .toLowerCase()
+                            .includes(search);
+
+
+                    const matchesType =
+                        !type ||
+                        event.type === type;
+
+
+                    const matchesMode =
+                        !mode ||
+                        event.mode === mode;
+
+
+                    return (
+                        matchesSearch &&
+                        matchesType &&
+                        matchesMode
+                    );
+
+                });
+
+
+            container.innerHTML = "";
+
+
+            if (filteredEvents.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-message">
+                        No events found.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            filteredEvents.forEach(event => {
+
+                container.innerHTML += `
+
+                    <div class="event-card">
+
+                        <span class="event-type">
+                            ${event.type.toUpperCase()}
+                        </span>
+
+                        <h3>
+                            ${event.name}
+                        </h3>
+
+                        <p>
+                            📅 ${event.date}
+                            <br>
+                            🏛 ${event.organizer}
+                            <br>
+                            👥 ${event.participants.length}
+                            participants
+                            <br>
+                            📜 ${event.evidence}
+                        </p>
+
+                        <br>
+
+                        <span class="tag ${event.mode.toLowerCase()}">
+                            ${event.mode}
+                        </span>
+
+                        <div class="event-actions">
+
+                            <button
+                                class="btn secondary"
+                                onclick="editEvent(${event.id})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn danger"
+                                onclick="deleteEvent(${event.id})">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+            });
+
+        }
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        function openEventModal(eventId = null) {
+
+            editingEventId = eventId;
+
+
+            document
+                .getElementById("eventModal")
+                .classList.add("show");
+
+
+            if (eventId) {
+
+                const event =
+                    events.find(
+                        item => item.id === eventId
+                    );
+
+
+                document.getElementById("modalTitle")
+                    .textContent = "Update Event";
+
+
+                document.getElementById("eventName")
+                    .value = event.name;
+
+
+                document.getElementById("eventType")
+                    .value = event.type;
+
+
+                document.getElementById("eventMode")
+                    .value = event.mode;
+
+
+                document.getElementById("eventOrganizer")
+                    .value = event.organizer;
+
+
+                document.getElementById("eventDate")
+                    .value = event.date;
+
+
+                document.getElementById("eventParticipants")
+                    .value =
+                    event.participants.join(", ");
+
+
+                document.getElementById("eventEvidence")
+                    .value = event.evidence;
+
+            }
+
+            else {
+
+                document.getElementById("modalTitle")
+                    .textContent = "Create New Event";
+
+
+                document.getElementById("eventName")
+                    .value = "";
+
+
+                document.getElementById("eventType")
+                    .value = "Workshop";
+
+
+                document.getElementById("eventMode")
+                    .value = "Offline";
+
+
+                document.getElementById("eventOrganizer")
+                    .value = "";
+
+
+                document.getElementById("eventDate")
+                    .value = "";
+
+
+                document.getElementById("eventParticipants")
+                    .value = "";
+
+
+                document.getElementById("eventEvidence")
+                    .value = "Certificate";
+
+            }
+
+        }
+
+
+        function closeEventModal() {
+
+            document
+                .getElementById("eventModal")
+                .classList.remove("show");
+
+            editingEventId = null;
+
+        }
+
+
+        /* =========================
+           SAVE EVENT
+        ========================= */
+
+        function saveEvent() {
+
+            const name =
+                document
+                    .getElementById("eventName")
+                    .value
+                    .trim();
+
+
+            const organizer =
+                document
+                    .getElementById("eventOrganizer")
+                    .value
+                    .trim();
+
+
+            const date =
+                document.getElementById("eventDate").value;
+
+
+            if (!name || !organizer || !date) {
+
+                alert(
+                    "Please enter Event Name, Organizer and Date."
+                );
+
+                return;
+            }
+
+
+            const participants =
+                document
+                    .getElementById("eventParticipants")
+                    .value
+                    .split(",")
+                    .map(name => name.trim())
+                    .filter(name => name !== "");
+
+
+            const eventData = {
+
+                id:
+                    editingEventId ||
+                    Date.now(),
+
+                name: name,
+
+                type:
+                    document
+                        .getElementById("eventType")
+                        .value,
+
+                organizer: organizer,
+
+                date: date,
+
+                mode:
+                    document
+                        .getElementById("eventMode")
+                        .value,
+
+                evidence:
+                    document
+                        .getElementById("eventEvidence")
+                        .value,
+
+                participants: participants
+
+            };
+
+
+            if (editingEventId) {
+
+                events =
+                    events.map(event => {
+
+                        if (event.id === editingEventId) {
+                            return eventData;
+                        }
+
+                        return event;
+
+                    });
+
+            }
+
+            else {
+
+                events.unshift(eventData);
+
+            }
+
+
+            closeEventModal();
+
+            renderDashboard();
+            renderEvents();
+            renderReports();
+
+        }
+
+
+        /* =========================
+           EDIT EVENT
+        ========================= */
+
+        function editEvent(id) {
+            openEventModal(id);
+        }
+
+
+        /* =========================
+           DELETE EVENT
+        ========================= */
+
+        function deleteEvent(id) {
+
+            const confirmation =
+                confirm(
+                    "Are you sure you want to delete this event?"
+                );
+
+
+            if (!confirmation) {
+                return;
+            }
+
+
+            events =
+                events.filter(
+                    event => event.id !== id
+                );
+
+
+            renderDashboard();
+            renderEvents();
+            renderReports();
+
+        }
+
+
+        /* =========================
+           STUDENTS
+        ========================= */
+
+        function loadStudents() {
+
+            const select =
+                document.getElementById("studentSelect");
+
+
+            select.innerHTML = "";
+
+
+            students.forEach(student => {
+
+                select.innerHTML += `
+
+                    <option value="${student}">
+                        ${student}
+                    </option>
+
+                `;
+
+            });
+
+
+            showStudentHistory();
+
+        }
+
+
+        function showStudentHistory() {
+
+            const select =
+                document.getElementById("studentSelect");
+
+
+            if (!select.value) {
+                return;
+            }
+
+
+            const student =
+                select.value;
+
+
+            const participation =
+                events.filter(
+                    event =>
+                        event.participants.includes(student)
+                );
+
+
+            const certificates =
+                participation.filter(
+                    event =>
+                        event.evidence === "Certificate"
+                ).length;
+
+
+            document.getElementById("studentSummary")
+                .innerHTML = `
+
+                    <div class="report-grid">
+
+                        <div class="report-card">
+
+                            <small>
+                                Events Attended
+                            </small>
+
+                            <strong>
+                                ${participation.length}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="report-card">
+
+                            <small>
+                                Certificates
+                            </small>
+
+                            <strong>
+                                ${certificates}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="report-card">
+
+                            <small>
+                                Student
+                            </small>
+
+                            <strong>
+                                ${student}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+            let table = `
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Event</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Mode</th>
+                            <th>Evidence</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+            `;
+
+
+            participation.forEach(event => {
+
+                table += `
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${event.name}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${event.type}
+                        </td>
+
+                        <td>
+                            ${event.date}
+                        </td>
+
+                        <td>
+                            ${event.mode}
+                        </td>
+
+                        <td>
+                            ✓ ${event.evidence}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+            table += `
+
+                    </tbody>
+
+                </table>
+
+            `;
+
+
+            if (participation.length === 0) {
+
+                document.getElementById("studentHistory")
+                    .innerHTML =
+                    `<div class="empty-message">
+                        No participation records found.
+                    </div>`;
+
+            }
+
+            else {
+
+                document.getElementById("studentHistory")
+                    .innerHTML = table;
+
+            }
+
+        }
+
+
+        /* =========================
+           REPORTS
+        ========================= */
+
+        function renderReports() {
+
+            const categoryCount = {};
+
+
+            events.forEach(event => {
+
+                categoryCount[event.type] =
+                    (categoryCount[event.type] || 0)
+                    +
+                    event.participants.length;
+
+            });
+
+
+            const sortedCategories =
+                Object.entries(categoryCount)
+                    .sort(
+                        (a, b) => b[1] - a[1]
+                    );
+
+
+            document.getElementById("popularCategory")
+                .textContent =
+                sortedCategories.length > 0
+                    ? sortedCategories[0][0]
+                    : "-";
+
+
+            const studentCount = {};
+
+
+            events.forEach(event => {
+
+                event.participants.forEach(student => {
+
+                    studentCount[student] =
+                        (studentCount[student] || 0) + 1;
+
+                });
+
+            });
+
+
+            const activeStudent =
+                Object.entries(studentCount)
+                    .sort(
+                        (a, b) => b[1] - a[1]
+                    )[0];
+
+
+            document.getElementById("activeStudent")
+                .textContent =
+                activeStudent
+                    ? activeStudent[0]
+                    : "-";
+
+
+            const total =
+                events.reduce(
+                    (sum, event) =>
+                        sum + event.participants.length,
+                    0
+                );
+
+
+            const online =
+                events
+                    .filter(
+                        event =>
+                            event.mode === "Online"
+                    )
+                    .reduce(
+                        (sum, event) =>
+                            sum + event.participants.length,
+                        0
+                    );
+
+
+            const percentage =
+                total === 0
+                    ? 0
+                    : Math.round(
+                        (online / total) * 100
+                    );
+
+
+            document.getElementById("onlinePercentage")
+                .textContent =
+                percentage + "%";
+
+
+            const bars =
+                document.getElementById("reportBars");
+
+
+            bars.innerHTML = "";
+
+
+            const max =
+                sortedCategories.length
+                    ? sortedCategories[0][1]
+                    : 1;
+
+
+            sortedCategories.forEach(
+                ([category, count]) => {
+
+                    const width =
+                        (count / max) * 100;
+
+
+                    bars.innerHTML += `
+
+                        <div class="bar-container">
+
+                            <div class="bar-label">
+
+                                <span>
+                                    ${category}
+                                </span>
+
+                                <strong>
+                                    ${count}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="bar">
+
+                                <div
+                                    class="bar-fill"
+                                    style="width:${width}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           CLOSE MODAL BY CLICKING
+           OUTSIDE
+        ========================= */
+
+        document
+            .getElementById("eventModal")
+            .addEventListener("click", function(event) {
+
+                if (event.target === this) {
+                    closeEventModal();
+                }
+
+            });
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        renderDashboard();
+        renderEvents();
+        renderReports();
+
+    </script>
+
+</body>
+</html>
